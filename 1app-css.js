@@ -13,6 +13,7 @@ app.set('views', 'views2');
 
 app.listen(3000);
 
+
 app.get('/', (req, res) => {
     const blogs = [
         {title: "Introduction", snippet: "Welcome to my website, i am writing this code using a tutorial " },
