@@ -14,11 +14,12 @@ app.set('views', 'views2');
 
 app.listen(3000);
 
-
+app.use(express.static('public'));
 // app.use(morgan('dev'));
 // app.use(morgan('common'));
 // app.use(morgan('tiny'));
 app.use(morgan('short'));
+
 
 
 app.get('/', (req, res) => {
