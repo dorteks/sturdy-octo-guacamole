@@ -1,18 +1,23 @@
  
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 const res = require('express/lib/response');
 const { home } = require('nodemon/lib/utils');
 
 
 const app = express();
 
+//connect to mongoDB
+const dbURI = 'mongodb+srv://dortex:kaydot245@nodelessons.utr3x.mongodb.net/nodelessons?retryWrites=true&w=majority'
+mongoose.connect(dbURI)
+    .then((result) => app.listen(3000))
+    .catch((err) => console.log(err));
+
 
 app.set('view engine', 'ejs');
 app.set('views', 'views2');
 
-
-app.listen(3000);
 
 app.use(express.static('public'));
 // app.use(morgan('dev'));
