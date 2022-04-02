@@ -16,10 +16,10 @@ const blogSchema = new Schema({
 
     body: {
         type: String,
-        required: truncate,
+        required: true
     }
 }, {timestamps: true});
 
 
 const Blog = mongoose.model('Blog', blogSchema);
-module.export = Blog;
+module.exports = Blog;
