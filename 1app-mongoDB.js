@@ -20,47 +20,47 @@ app.set('view engine', 'ejs');
 app.set('views', 'views2');
 
 
+//middleware and static files
 app.use(express.static('public'));
-// app.use(morgan('dev'));
+app.use(express.urlencoded( {extended: true }));
+app.use(morgan('dev'));
 // app.use(morgan('common'));
 // app.use(morgan('tiny'));
-app.use(morgan('short'));
+// app.use(morgan('short'));
 
 
+//routes
 
-// mongoose and mongo sandbox routes
-app.get('/add-blog', (req,res) =>  {
-    const blog = new Blog({
-        title: 'new blog 4',
-        snippet: 'about my new blog',
-        body: 'more about my new blog'
-    })
+//redirecting home page to /blogs
+app.get('/', (req, res) => {
+    res.redirect('/blogs');
+})
+
+
+//blog routes
+
+
+//to post a blog
+app.post('/blogs', (req,res) => {
+    const blog = new Blog(req.body);
 
     blog.save()
+        .then((result) => {
+            res.redirect('/blogs')
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+})
+
+
+app.get('/blogs/:id', (req,res) => {
+    const id = req.params.id;
+    console.log(id);
+
+    Blog.findById(id)
     .then((result) => {
-        res.send(result);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-});
-
-
-app.get('/all-blogs', (req,res) => {
-    Blog.find()
-    .then((result) => {
-        res.send(result);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-});
-
-
-app.get('/single-blog', (req,res) => {
-    Blog.findById("6248986b2302682ab230b7d0")
-    .then((result) => {
-        res.send(result);
+        res.render('details', { blog: result, title : 'Blog Details'})
     })
     .catch((err) => {
         console.log(err);
@@ -68,17 +68,32 @@ app.get('/single-blog', (req,res) => {
 })
 
 
-app.get('/', (req, res) => {
-    const blogs = [
-        {title: "Introduction", snippet: "Welcome to my website, i am writing this code using a tutorial " },
-        {title: "Beginner", snippet: "I started learning node and express few weeks back " },
-        {title: "Assistance/Help", snippet: "Kindly assist/help in any little way you can. Thank you. "},
-    ];
-    res.render('index', { title: "Home", blogs});
+app.delete('/blogs/:id', (req,res) => {
+    const id = req.params.id;
+
+    Blog.findByIdAndDelete(id)
+    .then(result => {
+        res.json({ redirect: '/blogs' })
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 })
+
 
 app.get('/about', (req, res) => {
     res.render('about', { title : "About"});
+})
+
+
+app.get('/blogs', (req,res) => {
+    Blog.find().sort({ createdAt : -1 })
+        .then((result) => {
+            res.render('index', { title : 'All Blogs', blogs : result });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 })
 
 
@@ -86,6 +101,7 @@ app.get('/blogs/create', (req, res) => {
     res.render('create', { title : "Create a new blog"});
 })
 
+//404 page
 app.use((req, res) => {
     res.render('404', { title : "404 page"});
 });

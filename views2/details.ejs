@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<!-- <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Lesson | <%= title  %> </title>
+</head> -->
+<body>
+
+<%- include('./partials/nav.ejs') %>
+
+    <!-- <nav>
+        <div class="site-title">
+            <a href="/"><h1>Blog Lesson</h1></a>
+            <p>A Lesson site</p>
+        </div>
+        <ul>
+            <li><a href="/">Blogs</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/blogs/create">New Blog</a></li>
+        </ul>
+    </nav>> -->
+
+
+    <div class="details content">
+        <h2><%= blog.title %></h2>
+    <div class="content">
+        <p> <%= blog.body %> </p>
+    </div>
+
+    <!-- to delete a blog with an id -->
+    <a class="delete" data-doc="<%= blog.id %>"> delete </a>
+
+    </div>
+
+<%- include('./partials/footer.ejs') %>
+
+<!-- to delete a blog -->
+<script>
+    const trashcan = document.querySelector('a.delete');
+
+    trashcan.addEventListener('click', (e) => {
+        const endpoint = `/blogs/${trashcan.dataset.doc}`;
+    
+        fetch(endpoint, {
+        method: 'DELETE'
+    })
+
+    .then((response) => response.json())
+    // .then((data) => console.log(data))
+    //or use the below to redirect to the next blog page
+    .then((data) => window.location.href = data.redirect)
+    .catch(err => console.log(err));
+    })
+</script>
+
+
+</body>
+</html>
