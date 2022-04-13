@@ -81,7 +81,6 @@ app.get('/about', (req, res) => {
     res.render('about', { title : "About"});
 })
 
-
 app.get('/blogs/create', (req, res) => {
     res.render('create', { title : "Create a new blog"});
 })
