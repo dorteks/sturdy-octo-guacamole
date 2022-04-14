@@ -39,8 +39,14 @@ app.get('/', (req, res) => {
 
 //blog routes
 
+//to create a new blog
+app.get('/blogs/create', (req, res) => {
+    res.render('create', { title : "Create a new blog"});
+})
 
-//to post a blog
+
+
+//to post a blog then redirect to home page
 app.post('/blogs', (req,res) => {
     const blog = new Blog(req.body);
 
@@ -51,9 +57,9 @@ app.post('/blogs', (req,res) => {
         .catch((err) => {
             console.log(err);
         })
-})
+});
 
-
+//to move the blog to the page wth the id indicated
 app.get('/blogs/:id', (req,res) => {
     const id = req.params.id;
     console.log(id);
@@ -65,9 +71,11 @@ app.get('/blogs/:id', (req,res) => {
     .catch((err) => {
         console.log(err);
     });
-})
+});
+//the detail views is in details.ejs
 
 
+//to delete a blog, then redirect to home page
 app.delete('/blogs/:id', (req,res) => {
     const id = req.params.id;
 
@@ -81,11 +89,14 @@ app.delete('/blogs/:id', (req,res) => {
 })
 
 
+// routes
+//about page
 app.get('/about', (req, res) => {
     res.render('about', { title : "About"});
 })
 
 
+//blog page (home page)
 app.get('/blogs', (req,res) => {
     Blog.find().sort({ createdAt : -1 })
         .then((result) => {
@@ -94,11 +105,6 @@ app.get('/blogs', (req,res) => {
         .catch((err) => {
             console.log(err);
         })
-})
-
-
-app.get('/blogs/create', (req, res) => {
-    res.render('create', { title : "Create a new blog"});
 })
 
 //404 page
